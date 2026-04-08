@@ -5,7 +5,7 @@ import { setupServer } from 'msw/node';
 import { getGasProducts } from './products';
 
 const server = setupServer(
-  http.get('https://api.openenergie.test/v1/products', ({ request }) => {
+  http.get('https://open-energie.api.vwala.be/v1/products', ({ request }) => {
     const url = new URL(request.url);
 
     expect(url.searchParams.get('yearMonth')).toBe('2025-10');
@@ -61,7 +61,7 @@ describe('getGasProducts', () => {
     await expect(
       getGasProducts({
         yearMonth: '2025-10',
-        baseUrl: 'https://api.openenergie.test',
+        baseUrl: 'https://open-energie.api.vwala.be',
         apiKey: 'test-api-key',
       }),
     ).resolves.toEqual([

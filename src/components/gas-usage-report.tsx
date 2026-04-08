@@ -98,8 +98,6 @@ export default function GasUsageReportView({ report }: GasUsageReportViewProps) 
           </tbody>
         </table>
       </div>
-
-      <p className="gas-report__footnote">Mockup only: the final app will fill this layout with monthly tariff data for the selected period.</p>
     </section>
   );
 }

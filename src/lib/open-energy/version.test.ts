@@ -5,7 +5,7 @@ import { setupServer } from 'msw/node';
 import { getProductVersionForMonth } from './version';
 
 const server = setupServer(
-  http.get('https://api.openenergie.test/v1/products/42/versions/2025-10', ({ request }) => {
+  http.get('https://open-energie.api.vwala.be/v1/products/42/versions/2025-10', ({ request }) => {
     expect(request.headers.get('x-api-key')).toBe('test-api-key');
 
     return HttpResponse.json({
@@ -61,7 +61,7 @@ describe('getProductVersionForMonth', () => {
       getProductVersionForMonth({
         productId: 42,
         yearMonth: '2025-10',
-        baseUrl: 'https://api.openenergie.test',
+        baseUrl: 'https://open-energie.api.vwala.be',
         apiKey: 'test-api-key',
       }),
     ).resolves.toEqual(

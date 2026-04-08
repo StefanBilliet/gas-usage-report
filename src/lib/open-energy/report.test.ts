@@ -168,13 +168,13 @@ describe('getGasUsageReport', () => {
   test('given the fixed 7-month period when the report is built then it orchestrates the data services and returns the breakdown', async () => {
     const report = await getGasUsageReport({
       period: { startMonth: '2025-10', endMonth: '2026-04' },
-      baseUrl: 'https://api.openenergie.test',
+      baseUrl: 'https://open-energie.api.vwala.be',
       apiKey: 'test-api-key',
     });
 
     expect(mockedGetGasProducts).toHaveBeenCalledWith({
       yearMonth: '2025-10',
-      baseUrl: 'https://api.openenergie.test',
+      baseUrl: 'https://open-energie.api.vwala.be',
       apiKey: 'test-api-key',
     });
     expect(mockedGetProductVersionForMonth).toHaveBeenCalledTimes(7);

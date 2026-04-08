@@ -5,7 +5,7 @@ import { setupServer } from 'msw/node';
 import { simulateProductVersion } from './simulate';
 
 const server = setupServer(
-  http.post('https://api.openenergie.test/v1/products/42/versions/7/simulate', async ({ request }) => {
+  http.post('https://open-energie.api.vwala.be/v1/products/42/versions/7/simulate', async ({ request }) => {
     expect(request.headers.get('x-api-key')).toBe('test-api-key');
     expect(await request.json()).toEqual({
       postalCode: '9000',
@@ -80,7 +80,7 @@ describe('simulateProductVersion', () => {
       simulateProductVersion({
         productId: 42,
         versionId: 7,
-        baseUrl: 'https://api.openenergie.test',
+        baseUrl: 'https://open-energie.api.vwala.be',
         apiKey: 'test-api-key',
         payload: {
           postalCode: '9000',
