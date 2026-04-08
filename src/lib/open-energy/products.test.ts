@@ -11,6 +11,8 @@ const server = setupServer(
     expect(url.searchParams.get('yearMonth')).toBe('2025-10');
     expect(url.searchParams.get('energyType')).toBe('gas');
     expect(url.searchParams.get('contractType')).toBe('consumption');
+    expect(url.searchParams.get('search')).toBeNull();
+    expect(url.searchParams.get('priceModel')).toBeNull();
     expect(request.headers.get('x-api-key')).toBe('test-api-key');
 
     return HttpResponse.json({
@@ -70,5 +72,34 @@ describe('getGasProducts', () => {
         productName: 'Fixed Gas 2025',
       }),
     ]);
+  });
+
+  test('given a target product when the gas catalogue is requested then it forwards search filters', async () => {
+    server.use(
+      http.get('https://open-energie.api.vwala.be/v1/products', ({ request }) => {
+        const url = new URL(request.url);
+
+        expect(url.searchParams.get('yearMonth')).toBe('2025-10');
+        expect(url.searchParams.get('energyType')).toBe('gas');
+        expect(url.searchParams.get('contractType')).toBe('consumption');
+        expect(url.searchParams.get('search')).toBe('Eneco Aardgas Flex');
+        expect(url.searchParams.get('priceModel')).toBe('variable');
+
+        return HttpResponse.json({
+          data: [],
+          meta: { offset: 0, limit: 25, total: 0 },
+        });
+      }),
+    );
+
+    await expect(
+      getGasProducts({
+        yearMonth: '2025-10',
+        baseUrl: 'https://open-energie.api.vwala.be',
+        apiKey: 'test-api-key',
+        search: 'Eneco Aardgas Flex',
+        priceModel: 'variable',
+      }),
+    ).resolves.toEqual([]);
   });
 });

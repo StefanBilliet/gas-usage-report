@@ -1,5 +1,5 @@
 import GasUsageReportView from '../components/gas-usage-report';
-import { getGasUsageReport } from '../lib/open-energy/report';
+import { getGasUsageReport } from '@/lib/open-energy/report';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,13 +9,13 @@ const reportPeriod = {
 } as const;
 
 const monthlyUsageByMonth = {
-  '2025-10': 1320,
-  '2025-11': 1410,
-  '2025-12': 1560,
-  '2026-01': 1510,
-  '2026-02': 1340,
-  '2026-03': 1060,
-  '2026-04': 1040,
+  '2025-10': 1000,
+  '2025-11': 1200,
+  '2025-12': 2500,
+  '2026-01': 2800,
+  '2026-02': 2500,
+  '2026-03': 1500,
+  '2026-04': 1000,
 } as const;
 
 export default async function Page() {

@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, test, vi } from 'vitest';
 
-import type { GasUsageReport } from '../components/gas-usage-report.types';
-import { getGasUsageReport } from '../lib/open-energy/report';
+import type { GasUsageReport } from '@/components/gas-usage-report.types';
+import { getGasUsageReport } from '@/lib/open-energy/report';
 import Page from './page';
 
 vi.mock('../lib/open-energy/report', () => ({
@@ -22,16 +22,16 @@ const report: GasUsageReport = {
     endMonth: 'April 2026',
   },
   summary: {
-    totalConsumptionInKwh: 9240,
-    totalCostInEuro: 1681.68,
-    averageCostPerKwhInEuro: 0.182,
+    totalConsumptionInKwh: 12500,
+    totalCostInEuro: 2304.2,
+    averageCostPerKwhInEuro: 0.184,
   },
   monthlyUsageBreakdown: [
     {
       monthKey: '2025-10',
       label: 'October 2025',
-      consumptionInKwh: 1320,
-      costInEuro: 240.24,
+      consumptionInKwh: 1000,
+      costInEuro: 182,
       costPerKwhInEuro: 0.182,
     },
   ],
@@ -54,13 +54,13 @@ describe('Page', () => {
     expect(mockedGetGasUsageReport).toHaveBeenCalledWith({
       period: { startMonth: '2025-10', endMonth: '2026-04' },
       monthlyUsageByMonth: {
-        '2025-10': 1320,
-        '2025-11': 1410,
-        '2025-12': 1560,
-        '2026-01': 1510,
-        '2026-02': 1340,
-        '2026-03': 1060,
-        '2026-04': 1040,
+        '2025-10': 1000,
+        '2025-11': 1200,
+        '2025-12': 2500,
+        '2026-01': 2800,
+        '2026-02': 2500,
+        '2026-03': 1500,
+        '2026-04': 1000,
       },
       baseUrl: 'https://api.openenergie.example',
       apiKey: 'test-api-key-from-env',

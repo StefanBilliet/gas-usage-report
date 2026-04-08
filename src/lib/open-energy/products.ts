@@ -2,6 +2,8 @@ type GetGasProductsArgs = {
   yearMonth: string;
   baseUrl: string;
   apiKey: string;
+  search?: string;
+  priceModel?: 'fixed' | 'variable' | 'dynamic';
 };
 
 export type GasProduct = {
@@ -29,15 +31,26 @@ type GasProductsResponse = {
   data: GasProduct[];
 };
 
-export async function getGasProducts({ yearMonth, baseUrl, apiKey }: GetGasProductsArgs) {
-  const response = await fetch(
-    `${baseUrl}/v1/products?yearMonth=${encodeURIComponent(yearMonth)}&energyType=gas&contractType=consumption`,
-    {
-      headers: {
-        'x-api-key': apiKey,
-      },
+export async function getGasProducts({ yearMonth, baseUrl, apiKey, search, priceModel }: GetGasProductsArgs) {
+  const url = new URL('/v1/products', baseUrl);
+
+  url.searchParams.set('yearMonth', yearMonth);
+  url.searchParams.set('energyType', 'gas');
+  url.searchParams.set('contractType', 'consumption');
+
+  if (search) {
+    url.searchParams.set('search', search);
+  }
+
+  if (priceModel) {
+    url.searchParams.set('priceModel', priceModel);
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      'x-api-key': apiKey,
     },
-  );
+  });
 
   if (!response.ok) {
     throw new Error('Failed to load gas products');

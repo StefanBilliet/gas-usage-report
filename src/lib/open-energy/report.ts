@@ -1,7 +1,7 @@
 import { getGasProducts } from './products';
 import { getProductVersionForMonth } from './version';
 import { simulateProductVersion } from './simulate';
-import type { GasUsageReport } from '../../components/gas-usage-report.types';
+import type { GasUsageReport } from '@/components/gas-usage-report.types';
 
 type YearMonth = `${number}-${number}`;
 
@@ -20,6 +20,11 @@ const monthLabelFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
   timeZone: 'UTC',
 });
+
+const targetProduct = {
+  search: 'Eneco Aardgas Flex',
+  priceModel: 'variable' as const,
+};
 
 function parseYearMonth(yearMonth: YearMonth) {
   const [year, month] = yearMonth.split('-').map(Number);
@@ -63,9 +68,16 @@ export async function getGasUsageReport({ period, monthlyUsageByMonth, baseUrl, 
     yearMonth: period.startMonth,
     baseUrl,
     apiKey,
+    search: targetProduct.search,
+    priceModel: targetProduct.priceModel,
   });
 
-  const product = products[0];
+  const product = products.find(
+    (candidate) =>
+      candidate.priceModel === 'variable' &&
+      candidate.productName.toLowerCase().includes('aardgas flex') &&
+      candidate.merchant.displayName.toLowerCase().includes('eneco'),
+  );
 
   if (!product) {
     throw new Error('Failed to build gas usage report');

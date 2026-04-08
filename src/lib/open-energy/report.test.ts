@@ -34,9 +34,9 @@ beforeEach(() => {
   mockedGetGasProducts.mockResolvedValue([
     {
       id: 42,
-      productName: 'Fixed Gas 2025',
+      productName: 'Eneco Aardgas Flex',
       energyType: 'gas',
-      priceModel: 'fixed',
+      priceModel: 'variable',
       subType: null,
       serviceArea: { country: 'BE', region: 'Flanders' },
       characteristics: {
@@ -55,8 +55,8 @@ beforeEach(() => {
         cooperative: null,
       },
       merchant: {
-        id: 'merchant-a',
-        displayName: 'Merchant A',
+        id: 'eneco',
+        displayName: 'Eneco',
         website: null,
         hasNativeApp: null,
         cooperative: null,
@@ -67,8 +67,8 @@ beforeEach(() => {
 
   mockedGetProductVersionForMonth.mockImplementation(async ({ yearMonth }) => ({
     merchant: {
-      id: 'merchant-a',
-      displayName: 'Merchant A',
+      id: 'eneco',
+      displayName: 'Eneco',
       website: null,
       hasNativeApp: null,
       cooperative: null,
@@ -76,9 +76,9 @@ beforeEach(() => {
     },
     product: {
       id: 42,
-      productName: 'Fixed Gas 2025',
+      productName: 'Eneco Aardgas Flex',
       energyType: 'gas',
-      priceModel: 'fixed',
+      priceModel: 'variable',
       subType: null,
       serviceArea: { country: 'BE', region: 'Flanders' },
       characteristics: {
@@ -109,8 +109,8 @@ beforeEach(() => {
   mockedSimulateProductVersion.mockImplementation(async ({ payload }) => ({
     productDetails: {
       merchant: {
-        id: 'merchant-a',
-        displayName: 'Merchant A',
+        id: 'eneco',
+        displayName: 'Eneco',
         website: null,
         hasNativeApp: null,
         cooperative: null,
@@ -118,9 +118,9 @@ beforeEach(() => {
       },
       product: {
         id: 42,
-        productName: 'Fixed Gas 2025',
+        productName: 'Eneco Aardgas Flex',
         energyType: 'gas',
-        priceModel: 'fixed',
+        priceModel: 'variable',
         subType: null,
         serviceArea: { country: 'BE', region: 'Flanders' },
         characteristics: {
@@ -174,6 +174,8 @@ describe('getGasUsageReport', () => {
       yearMonth: '2025-11',
       baseUrl: 'https://open-energie.api.vwala.be',
       apiKey: 'test-api-key',
+      search: 'Eneco Aardgas Flex',
+      priceModel: 'variable',
     });
     expect(mockedGetProductVersionForMonth).toHaveBeenCalledTimes(2);
     expect(mockedSimulateProductVersion).toHaveBeenCalledTimes(2);
