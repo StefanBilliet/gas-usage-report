@@ -22,14 +22,11 @@ const mockedGetProductVersionForMonth = vi.mocked(getProductVersionForMonth);
 const mockedSimulateProductVersion = vi.mocked(simulateProductVersion);
 
 const monthlyUsage = [
-  ['2025-10', 1320],
   ['2025-11', 1410],
   ['2025-12', 1560],
-  ['2026-01', 1510],
-  ['2026-02', 1340],
-  ['2026-03', 1060],
-  ['2026-04', 1040],
 ] as const;
+
+const monthlyUsageByMonth = Object.fromEntries(monthlyUsage) as Record<string, number>;
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -165,40 +162,41 @@ beforeEach(() => {
 });
 
 describe('getGasUsageReport', () => {
-  test('given the fixed 7-month period when the report is built then it orchestrates the data services and returns the breakdown', async () => {
+  test('given a month range when the report is built then it orchestrates the data services and returns the breakdown', async () => {
     const report = await getGasUsageReport({
-      period: { startMonth: '2025-10', endMonth: '2026-04' },
+      period: { startMonth: '2025-11', endMonth: '2025-12' },
+      monthlyUsageByMonth,
       baseUrl: 'https://open-energie.api.vwala.be',
       apiKey: 'test-api-key',
     });
 
     expect(mockedGetGasProducts).toHaveBeenCalledWith({
-      yearMonth: '2025-10',
+      yearMonth: '2025-11',
       baseUrl: 'https://open-energie.api.vwala.be',
       apiKey: 'test-api-key',
     });
-    expect(mockedGetProductVersionForMonth).toHaveBeenCalledTimes(7);
-    expect(mockedSimulateProductVersion).toHaveBeenCalledTimes(7);
+    expect(mockedGetProductVersionForMonth).toHaveBeenCalledTimes(2);
+    expect(mockedSimulateProductVersion).toHaveBeenCalledTimes(2);
 
     expect(report.period).toEqual({
-      startMonth: 'October 2025',
-      endMonth: 'April 2026',
+      startMonth: 'November 2025',
+      endMonth: 'December 2025',
     });
 
-    expect(report.monthlyUsageBreakdown).toHaveLength(7);
+    expect(report.monthlyUsageBreakdown).toHaveLength(2);
     expect(report.monthlyUsageBreakdown[0]).toEqual(
       expect.objectContaining({
-        monthKey: '2025-10',
-        label: 'October 2025',
-        consumptionInKwh: 1320,
-        costInEuro: 240.24,
+        monthKey: '2025-11',
+        label: 'November 2025',
+        consumptionInKwh: 1410,
+        costInEuro: 256.62,
         costPerKwhInEuro: 0.182,
       }),
     );
 
     expect(report.summary).toEqual({
-      totalConsumptionInKwh: 9240,
-      totalCostInEuro: 1681.68,
+      totalConsumptionInKwh: 2970,
+      totalCostInEuro: 540.54,
       averageCostPerKwhInEuro: 0.182,
     });
   });

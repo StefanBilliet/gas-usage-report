@@ -5,19 +5,20 @@ type GasUsageReportViewProps = {
   report: GasUsageReport;
 };
 
-export default function GasUsageReportView({ report }: GasUsageReportViewProps) {
+export default function GasUsageReportView({ report }: Readonly<GasUsageReportViewProps>) {
+  const monthCount = report.monthlyUsageBreakdown.length;
   const maxCostInEuro = Math.max(...report.monthlyUsageBreakdown.map((month) => month.costInEuro));
 
   return (
     <section className="gas-report" aria-labelledby="gas-usage-report-title">
       <header className="gas-report__header">
-        <div>
-          <p className="gas-report__eyebrow">Gas usage report</p>
-          <h1 id="gas-usage-report-title">Gas costs over 7 months</h1>
-          <p className="gas-report__subtitle">
-            {report.period.startMonth} – {report.period.endMonth}
-          </p>
-        </div>
+          <div>
+            <p className="gas-report__eyebrow">Gas usage report</p>
+            <h1 id="gas-usage-report-title">Gas costs over {monthCount} {monthCount === 1 ? 'month' : 'months'}</h1>
+            <p className="gas-report__subtitle">
+              {report.period.startMonth} – {report.period.endMonth}
+            </p>
+          </div>
 
         <div className="gas-report__badge">Rendered from monthly tariff snapshots</div>
       </header>

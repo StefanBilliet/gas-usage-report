@@ -3,36 +3,62 @@ import { getProductVersionForMonth } from './version';
 import { simulateProductVersion } from './simulate';
 import type { GasUsageReport } from '../../components/gas-usage-report.types';
 
+type YearMonth = `${number}-${number}`;
+
 type GetGasUsageReportArgs = {
   period: {
-    startMonth: '2025-10';
-    endMonth: '2026-04';
+    startMonth: YearMonth;
+    endMonth: YearMonth;
   };
+  monthlyUsageByMonth: Partial<Record<YearMonth, number>>;
   baseUrl: string;
   apiKey: string;
 };
 
-const monthlyUsage = [
-  ['2025-10', 1320],
-  ['2025-11', 1410],
-  ['2025-12', 1560],
-  ['2026-01', 1510],
-  ['2026-02', 1340],
-  ['2026-03', 1060],
-  ['2026-04', 1040],
-] as const;
+const monthLabelFormatter = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+});
 
-const monthLabels: Record<string, string> = {
-  '2025-10': 'October 2025',
-  '2025-11': 'November 2025',
-  '2025-12': 'December 2025',
-  '2026-01': 'January 2026',
-  '2026-02': 'February 2026',
-  '2026-03': 'March 2026',
-  '2026-04': 'April 2026',
-};
+function parseYearMonth(yearMonth: YearMonth) {
+  const [year, month] = yearMonth.split('-').map(Number);
 
-export async function getGasUsageReport({ period, baseUrl, apiKey }: GetGasUsageReportArgs): Promise<GasUsageReport> {
+  return new Date(Date.UTC(year, month - 1, 1));
+}
+
+function formatYearMonth(date: Date) {
+  const year = date.getUTCFullYear();
+  const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+
+  return `${year}-${month}` as YearMonth;
+}
+
+function listMonths(startMonth: YearMonth, endMonth: YearMonth) {
+  const current = parseYearMonth(startMonth);
+  const end = parseYearMonth(endMonth);
+
+  if (current > end) {
+    throw new Error('Invalid gas usage report period');
+  }
+
+  const months: YearMonth[] = [];
+
+  while (current <= end) {
+    months.push(formatYearMonth(current));
+    current.setUTCMonth(current.getUTCMonth() + 1);
+  }
+
+  return months;
+}
+
+function formatMonthLabel(yearMonth: YearMonth) {
+  return monthLabelFormatter.format(parseYearMonth(yearMonth));
+}
+
+export async function getGasUsageReport({ period, monthlyUsageByMonth, baseUrl, apiKey }: GetGasUsageReportArgs): Promise<GasUsageReport> {
+  const months = listMonths(period.startMonth, period.endMonth);
+
   const products = await getGasProducts({
     yearMonth: period.startMonth,
     baseUrl,
@@ -47,7 +73,13 @@ export async function getGasUsageReport({ period, baseUrl, apiKey }: GetGasUsage
 
   const monthlyUsageBreakdown = [] as GasUsageReport['monthlyUsageBreakdown'];
 
-  for (const [monthKey, consumptionInKwh] of monthlyUsage) {
+  for (const monthKey of months) {
+    const consumptionInKwh = monthlyUsageByMonth[monthKey];
+
+    if (consumptionInKwh === undefined) {
+      throw new Error('Missing monthly gas usage data');
+    }
+
     const versionResponse = await getProductVersionForMonth({
       productId: product.id,
       yearMonth: monthKey,
@@ -72,7 +104,7 @@ export async function getGasUsageReport({ period, baseUrl, apiKey }: GetGasUsage
 
     monthlyUsageBreakdown.push({
       monthKey,
-      label: monthLabels[monthKey],
+      label: formatMonthLabel(monthKey),
       consumptionInKwh,
       costInEuro,
       costPerKwhInEuro: Number((costInEuro / consumptionInKwh).toFixed(3)),
@@ -86,8 +118,8 @@ export async function getGasUsageReport({ period, baseUrl, apiKey }: GetGasUsage
 
   return {
     period: {
-      startMonth: monthLabels[period.startMonth],
-      endMonth: monthLabels[period.endMonth],
+      startMonth: formatMonthLabel(period.startMonth),
+      endMonth: formatMonthLabel(period.endMonth),
     },
     summary: {
       totalConsumptionInKwh,

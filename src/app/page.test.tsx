@@ -53,10 +53,19 @@ describe('Page', () => {
 
     expect(mockedGetGasUsageReport).toHaveBeenCalledWith({
       period: { startMonth: '2025-10', endMonth: '2026-04' },
+      monthlyUsageByMonth: {
+        '2025-10': 1320,
+        '2025-11': 1410,
+        '2025-12': 1560,
+        '2026-01': 1510,
+        '2026-02': 1340,
+        '2026-03': 1060,
+        '2026-04': 1040,
+      },
       baseUrl: 'https://api.openenergie.example',
       apiKey: 'test-api-key-from-env',
     });
-    expect(screen.getByRole('heading', { name: /gas costs over 7 months/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /gas costs over 1 month/i })).toBeInTheDocument();
     expect(screen.getByText(/October 2025 – April 2026/i)).toBeInTheDocument();
   });
 });
