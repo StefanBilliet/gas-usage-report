@@ -26,16 +26,17 @@ export default function GasCostReportMockup() {
         </article>
       </div>
 
-      <section className="gas-report__chart" aria-label="Monthly cost trend">
+      <section className="gas-report__chart" aria-labelledby="gas-report-chart-title">
         <div className="gas-report__chart-header">
           <div>
             <p className="gas-report__eyebrow">Visual trend</p>
-            <h2>Monthly total cost</h2>
+            <h2 id="gas-report-chart-title">Monthly total cost</h2>
           </div>
           <p className="gas-report__chart-note">Bars show the relative monthly spend incl. VAT.</p>
         </div>
 
-        <div className="gas-report__bars" role="img" aria-label="Bar chart of monthly total cost">
+        <figure className="gas-report__bars">
+          <figcaption className="sr-only">Bar chart of monthly total cost</figcaption>
           <div className="gas-report__y-axis" aria-hidden="true">
             <span>€ 300</span>
             <span>€ 200</span>
@@ -43,44 +44,58 @@ export default function GasCostReportMockup() {
             <span>€ 0</span>
           </div>
 
-          <div className="gas-report__bar-grid">
-            <div className="gas-report__bar-item">
-              <div className="gas-report__bar" style={{ height: '78px' }} />
-              <span>Oct</span>
-              <strong>€ 239.76</strong>
-            </div>
-            <div className="gas-report__bar-item">
-              <div className="gas-report__bar" style={{ height: '84px' }} />
-              <span>Nov</span>
-              <strong>€ 258.30</strong>
-            </div>
-            <div className="gas-report__bar-item">
-              <div className="gas-report__bar" style={{ height: '96px' }} />
-              <span>Dec</span>
-              <strong>€ 293.76</strong>
-            </div>
-            <div className="gas-report__bar-item">
-              <div className="gas-report__bar" style={{ height: '94px' }} />
-              <span>Jan</span>
-              <strong>€ 289.92</strong>
-            </div>
-            <div className="gas-report__bar-item">
-              <div className="gas-report__bar" style={{ height: '81px' }} />
-              <span>Feb</span>
-              <strong>€ 250.22</strong>
-            </div>
-            <div className="gas-report__bar-item">
-              <div className="gas-report__bar" style={{ height: '63px' }} />
-              <span>Mar</span>
-              <strong>€ 193.94</strong>
-            </div>
-            <div className="gas-report__bar-item">
-              <div className="gas-report__bar" style={{ height: '52px' }} />
-              <span>Apr</span>
-              <strong>€ 158.66</strong>
-            </div>
-          </div>
-        </div>
+          <ul className="gas-report__bar-grid" aria-label="Monthly usage and cost breakdown">
+            <li className="gas-report__bar-item" aria-label="October 2025, € 239.76, 1,320 kWh">
+              <span className="gas-report__bar-month" id="oct-label">October 2025</span>
+              <strong className="gas-report__bar-value" id="oct-value">€ 239.76 · 1,320 kWh</strong>
+              <div className="gas-report__bar-track" aria-hidden="true">
+                <div className="gas-report__bar" style={{ height: '78px' }} />
+              </div>
+            </li>
+            <li className="gas-report__bar-item" aria-label="November 2025, € 258.30, 1,410 kWh">
+              <span className="gas-report__bar-month" id="nov-label">November 2025</span>
+              <strong className="gas-report__bar-value" id="nov-value">€ 258.30 · 1,410 kWh</strong>
+              <div className="gas-report__bar-track" aria-hidden="true">
+                <div className="gas-report__bar" style={{ height: '84px' }} />
+              </div>
+            </li>
+            <li className="gas-report__bar-item" aria-label="December 2025, € 293.76, 1,560 kWh">
+              <span className="gas-report__bar-month" id="dec-label">December 2025</span>
+              <strong className="gas-report__bar-value" id="dec-value">€ 293.76 · 1,560 kWh</strong>
+              <div className="gas-report__bar-track" aria-hidden="true">
+                <div className="gas-report__bar" style={{ height: '96px' }} />
+              </div>
+            </li>
+            <li className="gas-report__bar-item" aria-label="January 2026, € 289.92, 1,510 kWh">
+              <span className="gas-report__bar-month" id="jan-label">January 2026</span>
+              <strong className="gas-report__bar-value" id="jan-value">€ 289.92 · 1,510 kWh</strong>
+              <div className="gas-report__bar-track" aria-hidden="true">
+                <div className="gas-report__bar" style={{ height: '94px' }} />
+              </div>
+            </li>
+            <li className="gas-report__bar-item" aria-label="February 2026, € 250.22, 1,340 kWh">
+              <span className="gas-report__bar-month" id="feb-label">February 2026</span>
+              <strong className="gas-report__bar-value" id="feb-value">€ 250.22 · 1,340 kWh</strong>
+              <div className="gas-report__bar-track" aria-hidden="true">
+                <div className="gas-report__bar" style={{ height: '81px' }} />
+              </div>
+            </li>
+            <li className="gas-report__bar-item" aria-label="March 2026, € 193.94, 1,060 kWh">
+              <span className="gas-report__bar-month" id="mar-label">March 2026</span>
+              <strong className="gas-report__bar-value" id="mar-value">€ 193.94 · 1,060 kWh</strong>
+              <div className="gas-report__bar-track" aria-hidden="true">
+                <div className="gas-report__bar" style={{ height: '63px' }} />
+              </div>
+            </li>
+            <li className="gas-report__bar-item" aria-label="April 2026, € 158.66, 1,040 kWh">
+              <span className="gas-report__bar-month" id="apr-label">April 2026</span>
+              <strong className="gas-report__bar-value" id="apr-value">€ 158.66 · 1,040 kWh</strong>
+              <div className="gas-report__bar-track" aria-hidden="true">
+                <div className="gas-report__bar" style={{ height: '52px' }} />
+              </div>
+            </li>
+          </ul>
+        </figure>
       </section>
 
       <div className="gas-report__table-wrap">
