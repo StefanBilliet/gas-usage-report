@@ -109,6 +109,7 @@ export async function getGasUsageReport({ period, monthlyUsageByMonth, baseUrl, 
         city: 'Ghent',
         totalGasConsumption: consumptionInKwh,
         residential: true,
+        yearFraction: 1 / 12,
       },
     });
 

@@ -8,6 +8,7 @@ type SimulateProductVersionArgs = {
     city: string;
     totalGasConsumption: number;
     residential: boolean;
+    yearFraction?: number;
   };
 };
 

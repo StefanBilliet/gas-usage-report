@@ -7,12 +7,13 @@ import { simulateProductVersion } from './simulate';
 const server = setupServer(
   http.post('https://open-energie.api.vwala.be/v1/products/42/versions/7/simulate', async ({ request }) => {
     expect(request.headers.get('x-api-key')).toBe('test-api-key');
-    expect(await request.json()).toEqual({
-      postalCode: '9000',
-      city: 'Ghent',
-      totalGasConsumption: 1320,
-      residential: true,
-    });
+      expect(await request.json()).toEqual({
+        postalCode: '9000',
+        city: 'Ghent',
+        totalGasConsumption: 1320,
+        residential: true,
+        yearFraction: 1 / 12,
+      });
 
     return HttpResponse.json({
       productDetails: {
@@ -87,6 +88,7 @@ describe('simulateProductVersion', () => {
           city: 'Ghent',
           totalGasConsumption: 1320,
           residential: true,
+          yearFraction: 1 / 12,
         },
       }),
     ).resolves.toEqual(
